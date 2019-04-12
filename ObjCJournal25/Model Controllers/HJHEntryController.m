@@ -7,7 +7,6 @@
 //
 
 #import "HJHEntryController.h"
-#import "HJHEntry.h"
 
 @implementation HJHEntryController
 
@@ -22,16 +21,44 @@
     return shared;
 }
 
--(void)createEntry:(HJHEntry *)entry title:(NSString *)title bodyText:(NSString *)bodyText timestamp:(NSDate *)timestamp
+-(void)createEntry:(HJHEntry *)entry
 {
-    entry.title = title;
-    entry.bodyText = bodyText;
+    [self.entries addObject:entry];
+    [self saveToPersistentStore];
     
 }
 
 -(void)removeEntry:(HJHEntry *)entry
 {
-    [[[HJHEntryController shared] entries] removeObject:entry];
+    [self.entries removeObject:entry];
+    [self saveToPersistentStore];
+}
+
+- (void)updateEntry:(HJHEntry *)entry withTitle:(NSString *)title bodyText:(NSString *)bodyText
+{
+    entry.title = title;
+    entry.bodyText = bodyText;
+    [self saveToPersistentStore];
+}
+
+-(void)saveToPersistentStore
+{
+    NSMutableArray *entryDictionaries = [NSMutableArray new];
+    for (HJHEntry *entry in self.entries) {
+        [entryDictionaries addObject:entry.dictionaryRepresentation];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:entryDictionaries forKey:@"Entries"];
+}
+
+-(void)loadFromPersistentStore
+{
+    NSArray *entryDictionaries = [[NSUserDefaults standardUserDefaults] objectForKey:@"entries"];
+    for (NSDictionary *dictionary in entryDictionaries) {
+        HJHEntry *entry = [[HJHEntry new] initWithDictionary:dictionary];
+        [self createEntry:entry];
+        
+    }
+    
 }
 
 @end

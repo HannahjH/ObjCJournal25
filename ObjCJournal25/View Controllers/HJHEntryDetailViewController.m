@@ -38,13 +38,14 @@
     
 }
 - (IBAction)saveButtonTapped:(id)sender {
-    NSString *title = _titleTextField.text;
-    NSString *bodyText = _bodyTextView.text;
-    
-    [[HJHEntryController shared] createEntry:_entry title:title bodyText:bodyText timestamp:_entry.timestamp];
-    
-    [[self navigationController] popViewControllerAnimated:true];
-    
+    if (self.entry) {
+        [[HJHEntryController shared] updateEntry:self.entry withTitle:self.titleTextField.text bodyText:_bodyTextView.text];
+    } else {
+        HJHEntry *entry = [[HJHEntry alloc] initWithName:self.titleTextField.text bodyText:_bodyTextView.text timestamp:[NSDate date]];
+        
+        [[HJHEntryController shared] createEntry:entry];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

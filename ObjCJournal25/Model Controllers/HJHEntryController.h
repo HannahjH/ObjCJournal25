@@ -17,10 +17,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (HJHEntryController *)shared;
 
 // Source of truth
-@property (nonatomic, readwrite) NSMutableArray <HJHEntry *> *entries;
+@property (nonatomic, readwrite) NSMutableArray *entries;
 
--(void)createEntry:(HJHEntry *)entry title:(NSString *)title bodyText:(NSString *)bodyText timestamp:(NSDate *)timestamp;
+-(void)createEntry:(HJHEntry *)entry;
 -(void)removeEntry:(HJHEntry *)entry;
+-(void)updateEntry: (HJHEntry *)entry withTitle:(NSString *)title bodyText:(NSString *)bodyText;
+-(void)saveToPersistentStore;
+-(void)loadFromPersistentStore;
+
 
 @end
 

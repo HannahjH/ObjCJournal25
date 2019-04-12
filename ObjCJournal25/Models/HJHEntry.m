@@ -21,5 +21,22 @@
     }
     return self;
 }
+-(instancetype)initWithDictionary:(NSDictionary *)dictionary
+{
+    NSString *title = dictionary[@"title"];
+    NSString *bodyText = dictionary[@"bodyText"];
+    NSDate *timestamp = dictionary[@"timestamp"];
+    return [self initWithName:title bodyText:bodyText timestamp:timestamp];
+}
+
+- (NSDictionary *)dictionaryRepresentation
+{
+    return @{
+             @"title": self.title,
+             @"bodyText": self.bodyText,
+             @"timestamp": self.timestamp
+             
+             };
+}
 
 @end
